@@ -1,6 +1,9 @@
 This repository contains the implementation of the PROC language discussed in Section 3.3 in EOPL3.
 
-You can test the implementation by running `all.rkt` in DrRacket with the following test cases:
+You can test the implementation by running `all.rkt` in DrRacket with the following test cases.
+
+* step 1: load `all.rkt` in DrRacket and click on "Run" to execute the definitions.
+* step 2: copy and paste the following commands one at a time into DrRacket's REPL/console.
 ```
 > (run "(proc(x) -(x,1)  30)")
 #(struct:num-val 29)
