@@ -1,5 +1,28 @@
 This repository contains the implementation of the PROC language discussed in Section 3.3 in EOPL3.
 
+## Syntax
+The concrete syntax for the LET language is as follows (`[]` denotes abstract syntax):
+```
+Program     ::= Expression
+                [a-program (exp1)]
+Expression  ::= Number
+                [const-exp (num)]
+            ::= - (Expression , Expression)
+                [diff-exp (exp1 exp2)]
+            ::= zero? (Expression)
+                [zero?-exp (exp1)]
+            ::= if Expression then Expression else Expression
+                [if-exp (exp1 exp2 exp3)]
+            ::= identifier
+                [var-exp (var)]
+            ::= let identifier = Expression in Expression
+                [let-exp (var exp1 body)]
+            ::= proc (identifier) Expression
+                [proc-exp (var body)]
+            ::= (Expression Expression)
+                [call-exp (rator rand)]
+```
+
 You can test the implementation by running `all.rkt` in DrRacket with the following test cases.
 
 * step 1: load `all.rkt` in DrRacket and click on "Run" to execute the definitions.

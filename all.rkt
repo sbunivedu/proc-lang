@@ -16,9 +16,9 @@
     (expression ("zero?" "(" expression ")") zero?-exp)
     (expression ("if" expression "then" expression "else" expression) if-exp)
     (expression (identifier) var-exp)
-    (expression ("let" identifier "=" expression "in" expression) let-exp))
-    (expression ("proc" "(" identifier ")" expression) proc-exp) ;; new
-    (expression ("(" expression expression ")") call-exp))       ;; new
+    (expression ("let" identifier "=" expression "in" expression) let-exp)
+    (expression ("proc" "(" identifier ")" expression) proc-exp)  ;; new
+    (expression ("(" expression expression ")") call-exp)))       ;; new
 
 (sllgen:make-define-datatypes scanner-spec grammar)
 
@@ -40,7 +40,12 @@
 
 (define-datatype expval expval?
   (num-val (num number?))
-  (bool-val (bool boolean?)))
+  (bool-val (bool boolean?))
+  (proc-val (proc proc?)))
+
+(define proc?
+  (lambda (val)
+    (procedure? val)))
 
 (define expval->num
   (lambda (val)
@@ -53,6 +58,12 @@
     (cases expval val
       (bool-val (bool) bool)
       (else (report-expval-extractor-error 'bool val)))))
+
+(define expval->proc
+  (lambda (val)
+    (cases expval val
+      (proc-val (proc) proc)
+      (else (report-expval-extractor-error 'proc val)))))
 
 (define report-expval-extractor-error
   (lambda (expected val)
@@ -164,12 +175,3 @@
 (define read-eval-print
   (sllgen:make-rep-loop "-->" value-of-program
     (sllgen:make-stream-parser scanner-spec grammar)))
-
-
-        (proc-exp (var body)
-          (proc-val (procedure var body env)))
-
-        (call-exp (rator rand)
-          (let ((proc (expval->proc (value-of rator env)))
-                (arg (value-of rand env)))
-            (apply-procedure proc arg)))
